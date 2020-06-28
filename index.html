@@ -36,7 +36,7 @@
         
       <div>
         <b-navbar toggleable="lg" type="dark" variant="info">
-          <b-navbar-brand href="#">NavBar</b-navbar-brand>
+          <b-navbar-brand href="#">Calculadora de Distribuciones</b-navbar-brand>
 
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -56,6 +56,13 @@
         <b-input-group  size="lg">
           <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="normalCantidad"></b-form-input>
         </b-input-group>
+        <div>
+          <b-button variant="danger" @click="distribucionNormal(normalCantidad)">Ingresar</b-button>
+        </div>
+        <div>
+          <p >{{final}}</p>
+        </div>
+        
         
       </div>
       <div v-show="currentTab==2">
@@ -99,12 +106,26 @@
         data: {
           name: "",
           currentTab: '',
-          normalCantidad: ''
+          normalCantidad: '',
+          final: '',
+          resultadoNormalArray: []
         },
         methods: {
          setCurrentTab(tab) {
             this.currentTab = tab;
-            console.log(this.currentTab);
+            console.log(this.currentTab);   
+         },
+
+         distribucionNormal (cantidad) {
+            this.normalCantidad = cantidad;
+            console.log(this.normalCantidad);
+            this.final = (1 / this.normalCantidad) * 100;
+            this.final = this.final.toFixed(4);
+            console.log(this.final);
+            for (var i = 0; i < cantidad; i++){
+              this.resultadoNormalArray.push('Objeto ' + (i + 1));
+              console.log(this.resultadoNormalArray [i]);
+            }
          } 
         },
         watch: {
