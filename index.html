@@ -1,39 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <title>My first BootstrapVue app</title>
+
+    <!-- Required Stylesheets -->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"
+    />
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
+
+    <!-- Required scripts -->
+    <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+  </head>
+  <body>
+    <!-- Our application root element -->
     <div id="app">
+        
+      <div>
+        <b-navbar toggleable="lg" type="dark" variant="info">
+          <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
+          <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-        <p>{{distUniformeArray}}</p>
+          <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+              <b-nav-item href="#">Link</b-nav-item>
+              <b-nav-item href="#" disabled>Disabled</b-nav-item>
+            </b-navbar-nav>
+          </b-collapse>
+        </b-navbar>
+      </div>
+
+      <div>
+        <b-container>
+
+            <b-form-group
+              horizontal
+              :label-cols="4"
+              description="Let us know your name."
+              label="Enter your name"
+            >
+              <b-form-input v-model.trim="name"></b-form-input>
+            </b-form-group>
+    
+            <b-alert variant="success" :show="showAlert">Hello {{ name }}</b-alert>
+          </b-container>
+      </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <!-- Start running your app -->
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                msg:'este es un mensaje',
-                distUniformeArray : []
-            },
-            methods: {
-                distribucionUniforme() {
-                    this.distUniformeArray = []
-                    this.distUniformeArray.push('uno');
-                    console.log(this.distUniformeArray.length);
-                },
-                distribucionBinomial (){
-
-                }
-            },
-            mounted: function(){
-                this.distribucionUniforme()
-            }
-        })
+      window.app = new Vue({
+        el: "#app",
+        data: {
+          name: "",
+        },
+        computed: {
+          showAlert() {
+            return this.name.length > 4 ? true : false;
+          },
+        },
+      });
     </script>
-</body>
+  </body>
 </html>
