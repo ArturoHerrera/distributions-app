@@ -42,27 +42,52 @@
 
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-              <b-nav-item href="#">Link</b-nav-item>
-              <b-nav-item href="#" disabled>Disabled</b-nav-item>
+              <b-nav-item @click="setCurrentTab(1)">Distribución normal</b-nav-item>
+              <b-nav-item @click="setCurrentTab(2)">Distribución binomial</b-nav-item>
+              <b-nav-item @click="setCurrentTab(3)">Distribución de Poisson</b-nav-item>
+              <b-nav-item @click="setCurrentTab(4)">Distribución Hipergeométrica</b-nav-item>
             </b-navbar-nav>
           </b-collapse>
         </b-navbar>
       </div>
+      
+      <div v-show="currentTab==1">
+        <!-- Using props -->
+        <b-input-group  size="lg">
+          <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="normalCantidad"></b-form-input>
+        </b-input-group>
+        
+      </div>
+      <div v-show="currentTab==2">
+        <!-- Using props -->
+        <b-input-group size="lg">
+          <b-form-input></b-form-input>
+        </b-input-group>
+        <b-input-group size="lg">
+          <b-form-input></b-form-input>
+        </b-input-group>
+        <b-input-group size="lg">
+          <b-form-input></b-form-input>
+        </b-input-group>
+        <b-input-group size="lg">
+          <b-form-input></b-form-input>
+        </b-input-group>
+      </div>
+      <div v-show="currentTab==3">
+        <!-- Using props -->
+        <b-input-group size="lg">
+          <b-form-input></b-form-input>
+        </b-input-group>
+        <b-input-group size="lg">
+          <b-form-input></b-form-input>
+        </b-input-group>
 
-      <div>
-        <b-container>
-
-            <b-form-group
-              horizontal
-              :label-cols="4"
-              description="Let us know your name."
-              label="Enter your name"
-            >
-              <b-form-input v-model.trim="name"></b-form-input>
-            </b-form-group>
-    
-            <b-alert variant="success" :show="showAlert">Hello {{ name }}</b-alert>
-          </b-container>
+      </div>
+      <div v-show="currentTab==4">
+        <!-- Using props -->
+        <b-input-group size="lg" prepend="$" append=".00">
+          <b-form-input></b-form-input>
+        </b-input-group>
       </div>
 
     </div>
@@ -73,11 +98,26 @@
         el: "#app",
         data: {
           name: "",
+          currentTab: '',
+          normalCantidad: ''
         },
-        computed: {
-          showAlert() {
-            return this.name.length > 4 ? true : false;
-          },
+        methods: {
+         setCurrentTab(tab) {
+            this.currentTab = tab;
+            console.log(this.currentTab);
+         } 
+        },
+        watch: {
+          currentTab: function () {
+            switch (this.currentTab) {
+              case 1:
+              console.log('caso1');
+              this.normalCantidad = '';
+              break;
+              
+            }
+            
+          }
         },
       });
     </script>
