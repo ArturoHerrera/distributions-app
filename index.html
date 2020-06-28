@@ -108,7 +108,12 @@
           currentTab: '',
           normalCantidad: '',
           final: '',
-          resultadoNormalArray: []
+          resultadoNormalArray: [],
+          pExito: '',
+          pFracaso: '',
+          nCiclos: '',
+          finalBinomial: ''
+
         },
         methods: {
          setCurrentTab(tab) {
@@ -126,7 +131,13 @@
               this.resultadoNormalArray.push('Objeto ' + (i + 1));
               console.log(this.resultadoNormalArray [i]);
             }
-         } 
+         },
+
+         distribucionBinomial (ciclos,fracaso,exito) {
+            this.ciclos = ciclos;
+            this.pFracaso = fracaso;
+            this.pExito = exito;
+         }
         },
         watch: {
           currentTab: function () {
