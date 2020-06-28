@@ -8,7 +8,7 @@
 <body>
     <div id="app">
 
-        
+
         <p>{{distUniformeArray}}</p>
     </div>
 
@@ -21,10 +21,13 @@
                 distUniformeArray : []
             },
             methods: {
-                distribucionUniforme: function() {
+                distribucionUniforme() {
                     this.distUniformeArray = []
                     this.distUniformeArray.push('uno');
                     console.log(this.distUniformeArray.length);
+                },
+                distribucionBinomial (){
+
                 }
             },
             mounted: function(){
