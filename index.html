@@ -7,7 +7,9 @@
 </head>
 <body>
     <div id="app">
-        <p>{{msg}}</p>
+
+        
+        <p>{{distUniformeArray}}</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
@@ -15,10 +17,18 @@
         new Vue({
             el: '#app',
             data: {
-                msg:'este es un mensaje'
+                msg:'este es un mensaje',
+                distUniformeArray : []
             },
             methods: {
-
+                distribucionUniforme: function() {
+                    this.distUniformeArray = []
+                    this.distUniformeArray.push('uno');
+                    console.log(this.distUniformeArray.length);
+                }
+            },
+            mounted: function(){
+                this.distribucionUniforme()
             }
         })
     </script>
