@@ -22,7 +22,13 @@
       rel="stylesheet"
       href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"
     />
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-js-toggle-button/1.3.3/ssr.index.min.js"></script>
+    
+    
+        
     <!-- Load polyfills to support older browsers -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
 
@@ -67,34 +73,51 @@
       </div>
       <div v-show="currentTab==2">
         <!-- Using props -->
+        <div>
+          <b-form-checkbox size="lg" v-model="banderaExito">Éxito</b-form-checkbox> <b-form-checkbox size="lg" v-model="banderaFracaso">Fracaso</b-form-checkbox>
+          <label>{{ banderaExito }}</label>
+        </div>  
         <b-input-group size="lg">
-          <b-form-input></b-form-input>
+          <b-form-input placeholder="Ingresa la probabilidad de éxito" v-model="pExito"></b-form-input>
         </b-input-group>
         <b-input-group size="lg">
-          <b-form-input></b-form-input>
+          <b-form-input placeholder="Ingresa la probabilidad de fracaso" v-model="qFracaso"></b-form-input>
         </b-input-group>
         <b-input-group size="lg">
-          <b-form-input></b-form-input>
+          <b-form-input placeholder="Ingresa la cantidad de eventos esperados" v-model="probabilidadEventos"></b-form-input>
         </b-input-group>
         <b-input-group size="lg">
-          <b-form-input></b-form-input>
-        </b-input-group>
+          <b-form-input placeholder="Ingresa la cantidad de ciclos" v-model="nCiclos"></b-form-input>
+        </b-input-group>        
+        <div>
+          <b-button variant="danger" @click="distribucionBinomial(pExito,qFracaso,nCiclos,probabilidadEventos)">Ingresar</b-button>
+        </div>
       </div>
+
+
       <div v-show="currentTab==3">
         <!-- Using props -->
         <b-input-group size="lg">
-          <b-form-input></b-form-input>
+          <b-form-input placeholder="Ingresa el número de éxitos" v-model="xExito"></b-form-input>
         </b-input-group>
         <b-input-group size="lg">
-          <b-form-input></b-form-input>
+          <b-form-input placeholder="Ingresa el promedio de éxitos esperados" v-model="lPromedio"></b-form-input>
         </b-input-group>
-
+        <b-input-group size="lg">
+          <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="probabilidad"></b-form-input>
+        </b-input-group>
+        <div>
+          <b-button variant="danger" @click="distribucionNormal(normalCantidad)">Ingresar</b-button>
+        </div>
       </div>
+
+
       <div v-show="currentTab==4">
         <!-- Using props -->
         <b-input-group size="lg" prepend="$" append=".00">
           <b-form-input></b-form-input>
         </b-input-group>
+        
       </div>
 
     </div>
@@ -110,14 +133,21 @@
           final: '',
           resultadoNormalArray: [],
           pExito: '',
-          pFracaso: '',
+          qFracaso: '',
+          probabilidadEventos: '',
           nCiclos: '',
-          finalBinomial: ''
+          finalBinomial: '',
+          xExito: '',
+          lPromedio: '',
+          probabilidad: '',
+          banderaExito: true,
+          banderaFracaso: false
 
         },
         methods: {
          setCurrentTab(tab) {
             this.currentTab = tab;
+            
             console.log(this.currentTab);   
          },
 
@@ -133,10 +163,47 @@
             }
          },
 
-         distribucionBinomial (ciclos,fracaso,exito) {
-            this.ciclos = ciclos;
-            this.pFracaso = fracaso;
-            this.pExito = exito;
+         distribucionBinomial(valX, valY, ciclos, n){
+              let result,x,y = 0;
+
+              let diff = ciclos - n;
+              
+              for (var i = 1; i <= n; i++) {
+                if(i == 1){
+                  x = valX;
+                } else {
+                  x = x * valX;
+                }
+              }
+
+              for (var i = 1; i <= diff; i++) {
+                if(i == 1){
+                  y = valY;
+                } else {
+                  y = y * valY;
+                }
+              }
+
+              return (x * y);
+          },
+
+          switchBinomial (p,q,c,n) {
+
+
+          },
+         
+         distribucionPossion () {
+          function rFact(num)
+          {
+              if (num === 0)
+                { return 1; }
+              else
+                { return num * rFact( num - 1 ); }
+          }
+
+          $('#msg').html(data.message)
+
+          console.log( (( Math.exp(-7) * Math.pow(7,10) )/(rFact(10))) )
          }
         },
         watch: {
@@ -148,7 +215,26 @@
               break;
               
             }
-            
+          },
+          
+          pExito: function (){
+            this.qFracaso = 100 - this.pExito;
+          },
+
+          qFracaso: function (){
+            this.pExito = 100 - this.qFracaso;
+          },
+
+          banderaExito: function () {
+            if (this.banderaExito == true) {
+              this.banderaFracaso = false;
+            }
+          },
+
+          banderaFracaso: function () {
+            if (this.banderaFracaso == true) {
+              this.banderaExito = false;
+            }
           }
         },
       });
