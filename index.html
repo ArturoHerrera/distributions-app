@@ -48,20 +48,15 @@
 
         <!-- Dist. Normal -->
         <div v-show="currentTab==1">
-          <b-input-group size="lg">
-            <b-form-input
-              placeholder="Ingresa la cantidad de elementos"
-              v-model="normalCantidad"
-            ></b-form-input>
+
+          <b-input-group size="lg" class="mb-4">
+            <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="normalCantidad" v-on:keypress="onlyNumbers($event)"></b-form-input>
           </b-input-group>
-          <div>
-            <b-button variant="danger" @click="distribucionNormal(normalCantidad)"
-              >Ingresar</b-button
-            >
-          </div>
-          <div>
-            <p>{{final}}</p>
-          </div>
+
+          <b-button class="text-center col-12 mb-4" variant="danger" @click="distribucionNormal(normalCantidad)">Calcular</b-button>
+          
+          <p class="col-12 mb-4 text-center">{{finalUniforme}}</p>
+
         </div>
 
         <!-- Dist. Binomial -->
@@ -154,7 +149,7 @@
           name: "",
           currentTab: "",
           normalCantidad: "",
-          final: "",
+          finalUniforme: "",
           resultadoNormalArray: [],
           pExito: "",
           qFracaso: "",
@@ -174,14 +169,16 @@
             console.log(this.currentTab);
           },
           distribucionNormal(cantidad) {
-            this.normalCantidad = cantidad;
-            console.log(this.normalCantidad);
-            this.final = (1 / this.normalCantidad) * 100;
-            this.final = this.final.toFixed(4);
-            console.log(this.final);
-            for (var i = 0; i < cantidad; i++) {
-              this.resultadoNormalArray.push("Objeto " + (i + 1));
-              console.log(this.resultadoNormalArray[i]);
+            if(this.normalCantidad){
+              this.normalCantidad = cantidad;
+              console.log(this.normalCantidad);
+              this.finalUniforme = (1 / this.normalCantidad) * 100;
+              this.finalUniforme = this.finalUniforme.toFixed(4);
+              console.log(this.finalUniforme);
+              for (var i = 0; i < cantidad; i++) {
+                this.resultadoNormalArray.push("Objeto " + (i + 1));
+                console.log(this.resultadoNormalArray[i]);
+              }
             }
           },
           distribucionBinomial(valX, valY, ciclos, n) {
@@ -220,6 +217,17 @@
               } else {
                 return num * this.factorial(num - 1);
               }
+          },
+          onlyNumbers: function(evt) {
+            evt = (evt) ? evt : window.event;
+
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+            if ((charCode > 31 && (charCode < 48 || charCode > 57))) {
+              evt.preventDefault();;
+            } else {
+              return true;
+            }
           }
         },
         watch: {
