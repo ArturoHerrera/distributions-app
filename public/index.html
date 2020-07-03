@@ -105,23 +105,18 @@
 
         <!-- Dist. Possion -->
         <div v-show="currentTab==3">
-          <div>p({{ xExito}};{{lPromedio}}) </div>
-          <b-input-group size="lg">
-            <b-form-input
-              placeholder="Ingresa el número de éxitos"
-              v-model="xExito"
-            ></b-form-input>
+          <p class="mb-4">p({{ xExito}};{{lPromedio}}) </p>
+          <b-input-group size="lg" class="mb-4">
+            <b-form-input placeholder="Ingresa el número de éxitos" v-model="xExito"></b-form-input>
           </b-input-group>
-          <b-input-group size="lg">
-            <b-form-input
-              placeholder="Ingresa el promedio de éxitos esperados"
-              v-model="lPromedio"
-            ></b-form-input>
+
+          <b-input-group size="lg" class="mb-4">
+            <b-form-input placeholder="Ingresa el promedio de éxitos esperados" v-model="lPromedio"></b-form-input>
           </b-input-group>
-        
+          
+          <b-button class="text-center col-12 mb-4" variant="danger" @click="distribucionPossion(normalCantidad)">Ingresar</b-button>
 
           <div>
-            <b-button variant="danger" @click="distribucionPossion(normalCantidad)">Ingresar</b-button>
             <p class="col-12 mb-4 text-center">La probabilidad de que sea un éxito en base al número de éxitos esperados es:  </p>
             <p class="col-12 mb-4 text-center">p({{ xExito}};{{lPromedio}}) = {{finalPossion}}</p>
             <p class="col-12 mb-4 text-center">La probabilidad de que sea menor a el número de éxitos es:   </p>
