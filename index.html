@@ -105,6 +105,7 @@
 
         <!-- Dist. Possion -->
         <div v-show="currentTab==3">
+          <div>p({{ xExito}};{{lPromedio}}) </div>
           <b-input-group size="lg">
             <b-form-input
               placeholder="Ingresa el número de éxitos"
@@ -117,16 +118,14 @@
               v-model="lPromedio"
             ></b-form-input>
           </b-input-group>
-          <b-input-group size="lg">
-            <b-form-input
-              placeholder="Ingresa la cantidad de elementos"
-              v-model="probabilidad"
-            ></b-form-input>
-          </b-input-group>
+        
+
           <div>
-            <b-button variant="danger" @click="distribucionNormal(normalCantidad)"
-              >Ingresar</b-button
-            >
+            <b-button variant="danger" @click="distribucionPossion(normalCantidad)">Ingresar</b-button>
+            <p class="col-12 mb-4 text-center">La probabilidad de que sea un éxito en base al número de éxitos esperados es:  </p>
+            <p class="col-12 mb-4 text-center">p({{ xExito}};{{lPromedio}}) = {{finalPossion}}</p>
+            <p class="col-12 mb-4 text-center">La probabilidad de que sea menor a el número de éxitos es:   </p>
+            <p class="col-12 mb-4 text-center">p({{ xExito}}<{{lPromedio}}) = {{finalPossionSum}}</p>
           </div>
         </div>
 
@@ -151,6 +150,7 @@
           normalCantidad: "",
           finalUniforme: "",
           resultadoNormalArray: [],
+          resultadoPossionArray: [],
           pExito: "",
           qFracaso: "",
           probabilidadEventos: "",
@@ -159,6 +159,8 @@
           xExito: "",
           lPromedio: "",
           probabilidad: "",
+          finalPossion: "",
+          finalPossionSum: "",
           banderaExito: true,
           banderaFracaso: false,
         },
@@ -208,8 +210,30 @@
           switchBinomial(p, q, c, n) {
             // TODO
           },
-          distribucionPossion() {
-            console.log((Math.exp(-7) * Math.pow(7, 10)) / this.factorial(10));
+          distribucionPossion() {       
+            PExito = this.xExito;
+            PEXitosum = this.xExito-1;
+            PPromedio = this.lPromedio;
+            totalsum = 0;
+             //Esto se agregó para evitar un error en el segundo resultado cuando el primer valor es 0
+            Factorcero = this.finalPossion = (Math.exp(-7) * Math.pow(PPromedio, 0)) / this.factorial(1)
+            for (var i = 0; i < PEXitosum; i++) {
+                this.resultadoPossionArray.push(i + 1);
+                console.log(this.resultadoPossionArray[i]);
+                Fac = this.resultadoPossionArray[i];
+                console.log(this.finalPossionSum = (Math.exp(-7) * Math.pow(PPromedio,Fac)) / this.factorial(Fac));
+                sum = this.finalPossionSum = (Math.exp(-7) * Math.pow(PPromedio,Fac)) / this.factorial(Fac);
+                totalsum = totalsum+sum;
+              }
+              this.finalPossionSum = totalsum + Factorcero;
+              //Esto se agregó para evitar un error en el primer resultado cuando el primer valor es 0
+            if(PExito == 0){
+              this.finalPossion = (Math.exp(-7) * Math.pow(PPromedio, PExito)) / this.factorial(1);
+            } else {
+              this.finalPossion = (Math.exp(-7) * Math.pow(PPromedio, PExito)) / this.factorial(PExito);
+            }
+            
+          
           },
           factorial(num) {
               if (num === 0) {
@@ -239,6 +263,12 @@
                 break;
             }
           },
+         /* pUno: function(){
+           return this.xExito ;
+          },
+          pDos: function(){
+            this.lPromedio;
+          }, */
           pExito: function () {
             this.qFracaso = 100 - this.pExito;
           },
