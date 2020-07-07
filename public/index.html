@@ -110,12 +110,14 @@
             <b-form-input
               placeholder="Ingresa el número de éxitos"
               v-model="xExito"
+              v-on:keypress="onlyNumbers($event)"
             ></b-form-input>
           </b-input-group>
           <b-input-group size="lg">
             <b-form-input
               placeholder="Ingresa el promedio de éxitos esperados"
               v-model="lPromedio"
+              v-on:keypress="onlyNumbers($event)"
             ></b-form-input>
           </b-input-group>
         
@@ -125,7 +127,7 @@
             <p class="col-12 mb-4 text-center">La probabilidad de que sea un éxito en base al número de éxitos esperados es:  </p>
             <p class="col-12 mb-4 text-center">p({{ xExito}};{{lPromedio}}) = {{finalPossion}}</p>
             <p class="col-12 mb-4 text-center">La probabilidad de que sea menor a el número de éxitos es:   </p>
-            <p class="col-12 mb-4 text-center">p({{ xExito}}<{{lPromedio}}) = {{finalPossionSum}}</p>
+            <p class="col-12 mb-4 text-center">p(x<{{xExito}}) = {{finalPossionSum}}</p>
           </div>
         </div>
 
@@ -216,21 +218,23 @@
             PPromedio = this.lPromedio;
             totalsum = 0;
              //Esto se agregó para evitar un error en el segundo resultado cuando el primer valor es 0
-            Factorcero = this.finalPossion = (Math.exp(-7) * Math.pow(PPromedio, 0)) / this.factorial(1)
+            Factorcero = this.finalPossion = (Math.exp(-PPromedio) * Math.pow(PPromedio, 0)) / this.factorial(1)
             for (var i = 0; i < PEXitosum; i++) {
+              console.log("caso " +i);
                 this.resultadoPossionArray.push(i + 1);
+               
                 console.log(this.resultadoPossionArray[i]);
                 Fac = this.resultadoPossionArray[i];
-                console.log(this.finalPossionSum = (Math.exp(-7) * Math.pow(PPromedio,Fac)) / this.factorial(Fac));
-                sum = this.finalPossionSum = (Math.exp(-7) * Math.pow(PPromedio,Fac)) / this.factorial(Fac);
+                console.log(this.finalPossionSum = (Math.exp(-PPromedio) * Math.pow(PPromedio,Fac)) / this.factorial(Fac));
+                sum = this.finalPossionSum = (Math.exp(-PPromedio) * Math.pow(PPromedio,Fac)) / this.factorial(Fac);
                 totalsum = totalsum+sum;
               }
               this.finalPossionSum = totalsum + Factorcero;
               //Esto se agregó para evitar un error en el primer resultado cuando el primer valor es 0
             if(PExito == 0){
-              this.finalPossion = (Math.exp(-7) * Math.pow(PPromedio, PExito)) / this.factorial(1);
+              this.finalPossion = (Math.exp(-PPromedio) * Math.pow(PPromedio, PExito)) / this.factorial(1);
             } else {
-              this.finalPossion = (Math.exp(-7) * Math.pow(PPromedio, PExito)) / this.factorial(PExito);
+              this.finalPossion = (Math.exp(-PPromedio) * Math.pow(PPromedio, PExito)) / this.factorial(PExito);
             }
             
           
@@ -261,14 +265,13 @@
                 console.log("caso1");
                 this.normalCantidad = "";
                 break;
+                case 3:
+                console.log("caso3");
+                this.xExito = "";
+                this.lPromedio = "";
+                break;
             }
           },
-         /* pUno: function(){
-           return this.xExito ;
-          },
-          pDos: function(){
-            this.lPromedio;
-          }, */
           pExito: function () {
             this.qFracaso = 100 - this.pExito;
           },
