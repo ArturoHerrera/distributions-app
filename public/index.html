@@ -53,7 +53,7 @@
             <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="normalCantidad" v-on:keypress="onlyNumbers($event)"></b-form-input>
           </b-input-group>
 
-          <b-button class="text-center col-12 mb-4" variant="danger" @click="distribucionNormal(normalCantidad)">Calcular</b-button>
+          <b-button class="text-center col-12 mb-4" variant="danger" @click="distribucionNormal()">Calcular</b-button>
           
           <p class="col-12 mb-4 text-center">{{finalUniforme}}</p>
 
@@ -135,11 +135,13 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Start running your app -->
     <script>
       window.app = new Vue({
         el: "#app",
         data: {
+          mainUrl:'http://localhost:3000/distribuciones',
           name: "",
           currentTab: "",
           normalCantidad: "",
@@ -165,17 +167,21 @@
 
             console.log(this.currentTab);
           },
-          distribucionNormal(cantidad) {
+          distribucionNormal() {
+
             if(this.normalCantidad){
-              this.normalCantidad = cantidad;
-              console.log(this.normalCantidad);
-              this.finalUniforme = (1 / this.normalCantidad) * 100;
-              this.finalUniforme = this.finalUniforme.toFixed(4);
-              console.log(this.finalUniforme);
-              for (var i = 0; i < cantidad; i++) {
-                this.resultadoNormalArray.push("Objeto " + (i + 1));
-                console.log(this.resultadoNormalArray[i]);
-              }
+
+              axios.post(this.mainUrl +"/normal",{
+                cantidadElementos: this.normalCantidad
+              })
+              .then(function (response) {
+
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+
             }
           },
           distribucionBinomial(valX, valY, ciclos, n) {

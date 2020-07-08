@@ -3,6 +3,6 @@ var router = express.Router();
 var distribucionesController = require('../controllers/distribuciones.controller')
 
 /* GET users listing. */
-router.post('/normal', distribucionesController.normal);
+router.post('/unirforme', distribucionesController.unirforme);
 
 module.exports = router;

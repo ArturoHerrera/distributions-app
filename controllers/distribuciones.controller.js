@@ -1,22 +1,29 @@
 const distribucionesController = {
-  normal(req, res) {
-    let cantidadElementos = req.body.cantidadElementos;
+  unirforme( req, res ) {
+
+    let cantidadElementos = null;
     var result = null;
     var resultArray = [];
+    var customResponse = null;
 
-    result = (1 / cantidadElementos * 100).toFixed(4)+'%';
+    try {
+      cantidadElementos = req.body.cantidadElementos;
+      result = ( 1 / cantidadElementos * 100 ).toFixed( 4 ) + '%';
 
-    for (var i = 0; i < cantidadElementos; i++) {
-        resultArray.push("Objeto " + (i + 1));
+      for (var i = 0; i < cantidadElementos; i++) {
+          resultArray.push( "Objeto " + ( i + 1 ) );
+      }
+  
+      customResponse = {
+          probabilidad : result,
+          cantidadObjetos : resultArray
+      }
+
+      res.send( { "customResponse" : customResponse } );
+    } catch ( error ) {
+      res.status( 500 ).send( error );
     }
 
-    var resultData = {
-        probabilidad: result,
-        cantidadObjetos: resultArray
-    }
-
-    console.log(cantidadElementos);
-    res.send({"response":resultData});
   },
   binomial(req, res) {
     //TODO
