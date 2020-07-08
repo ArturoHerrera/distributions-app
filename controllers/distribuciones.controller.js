@@ -27,10 +27,17 @@ const distribucionesController = {
   },
   binomial(req, res) {
     try {
-      let result,x,y = 0;
-            let diff = ciclos - n;
+      
+      let result = 0;
+      let x = 0;
+      let y = 0;
+      let valX = req.body.pExito;
+      let valY = req.body.qFracaso;
+      let ciclos = req.body.ciclos;
+      let probabilidadEventos = req.body.probabilidadEventos;
+      let diff = ciclos - probabilidadEventos;
 
-            for (var i = 1; i <= n; i++) {
+            for ( let i = 1; i <= probabilidadEventos; i++ ) {
               if (i == 1) {
                 x = valX;
               } else {
@@ -38,16 +45,22 @@ const distribucionesController = {
               }
             }
 
-            for (var i = 1; i <= diff; i++) {
-              if (i == 1) {
+            for ( let i = 1; i <= diff; i++ ) {
+              if ( i == 1 ) {
                 y = valY;
               } else {
                 y = y * valY;
               }
             }
 
-            return x * y;
-    } catch (error) {
+            result = x * y;
+
+            customResponse = {
+              probabilidad : result
+          }
+    
+          res.status( 200 ).send( { "customResponse" : customResponse } );
+    } catch ( error ) {
       res.status( 500 ).send( error );
     }
   },
