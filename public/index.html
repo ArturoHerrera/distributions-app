@@ -212,32 +212,33 @@
           switchBinomial(p, q, c, n) {
             // TODO
           },
-          distribucionPossion() {       
-            PExito = this.xExito;
-            PEXitosum = this.xExito-1;
-            PPromedio = this.lPromedio;
-            totalsum = 0;
+          distribucionPossion() {    
+            valorPromedio = this.lPromedio;
+            valorExito = this.xExito;
+           // pExitoSumatoria = this.xExito-1;    
+            totalSumatoria = 0;
              //Esto se agregó para evitar un error en el segundo resultado cuando el primer valor es 0
-            Factorcero = this.finalPossion = (Math.exp(-PPromedio) * Math.pow(PPromedio, 0)) / this.factorial(1)
-            for (var i = 0; i < PEXitosum; i++) {
-              console.log("caso " +i);
+            factorCero = this.formulaPossion(valorPromedio,0,1);
+            for (var i = 0; i < valorExito; i++) {
                 this.resultadoPossionArray.push(i + 1);
-               
-                console.log(this.resultadoPossionArray[i]);
-                Fac = this.resultadoPossionArray[i];
-                console.log(this.finalPossionSum = (Math.exp(-PPromedio) * Math.pow(PPromedio,Fac)) / this.factorial(Fac));
-                sum = this.finalPossionSum = (Math.exp(-PPromedio) * Math.pow(PPromedio,Fac)) / this.factorial(Fac);
-                totalsum = totalsum+sum;
+                factorialMenor = this.resultadoPossionArray[i];
+               // console.log(this.finalPossionSum = this.formulaPossion(valorPromedio,factorialMenor,factorialMenor)); para ver el valor individual de la sumatoria
+                sumatoria = this.formulaPossion(valorPromedio,factorialMenor,factorialMenor);
+                totalSumatoria = totalSumatoria+sumatoria;
               }
-              this.finalPossionSum = totalsum + Factorcero;
+              this.finalPossionSum = totalSumatoria + factorCero;
               //Esto se agregó para evitar un error en el primer resultado cuando el primer valor es 0
-            if(PExito == 0){
-              this.finalPossion = (Math.exp(-PPromedio) * Math.pow(PPromedio, PExito)) / this.factorial(1);
+            if(valorExito == 0){
+              this.finalPossion = this.formulaPossion(valorPromedio,valorExito,1);
             } else {
-              this.finalPossion = (Math.exp(-PPromedio) * Math.pow(PPromedio, PExito)) / this.factorial(PExito);
+              this.finalPossion = this.formulaPossion(valorPromedio,valorExito,valorExito);
             }
             
           
+          },
+
+          formulaPossion(promedio,exito,factor){
+            return(Math.exp(-promedio) * Math.pow(promedio, exito)) / this.factorial(factor);
           },
           factorial(num) {
               if (num === 0) {
