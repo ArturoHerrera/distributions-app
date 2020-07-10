@@ -56,6 +56,61 @@ const distribucionesController = {
   },
   hipergeometrica(req, res) {
     //TODO
+  },
+  informacionDistribucion (req, res){
+    
+    try {
+      let tipoDist = null;
+      tipoDist = req.body.tipo;
+      var result = null;
+      /*
+      switch (tipoDist){
+        case 1:
+          resp = 'Caso1';
+          console.log(resp);
+          customResponse = {
+            informacion : resp
+          }
+          res.status( 200 ).send( { "customResponse" : customResponse } );
+        break;
+        case 2:
+          resp = 'Caso2';
+          console.log(resp);
+          customResponse = {
+            informacion : resp
+          }
+          res.status( 200 ).send( { "customResponse" : customResponse } );
+        break;
+        case 3:
+          resp = 'Caso3';
+          console.log(resp);
+          customResponse = {
+            informacion : resp
+          }
+          res.status( 200 ).send( { "customResponse" : customResponse } );
+        break;
+        case 4:
+          resp = 'Caso4';
+          console.log(resp);
+          customResponse = {
+            informacion : resp
+          }
+          res.status( 200 ).send( { "customResponse" : customResponse } );
+        break;
+      }*/
+  
+      if (tipoDist = 1) {
+        result = 'SIMON';
+      }
+      customResponse = {
+          informacion : result
+      }
+
+      res.status( 200 ).send( { "customResponse" : customResponse } );
+    } catch ( error ) {
+      res.status( 500 ).send( error );
+    }
+    
   }
 };
 
