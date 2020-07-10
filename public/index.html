@@ -33,7 +33,7 @@
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-              <b-nav-item @click="setCurrentTab(1)">Distribución normal</b-nav-item>
+              <b-nav-item @click="setCurrentTab(1)">Distribución uniforme</b-nav-item>
               <b-nav-item @click="setCurrentTab(2)">Distribución binomial</b-nav-item>
               <b-nav-item @click="setCurrentTab(3)">Distribución de Poisson</b-nav-item>
               <b-nav-item @click="setCurrentTab(4)">Distribución Hipergeométrica</b-nav-item>
@@ -48,33 +48,26 @@
 
         <!-- Dist. Normal -->
         <div v-show="currentTab==1">
-          <div>{{ informacion }} {{ informacionFinal }}
-            <b-button v-b-modal.modal-1 @click="informacionDistribucion()">Información {{ informacionFinal }}</b-button>
-          
-            <b-modal id="modal-1" title="Distribución Uniforme">
-              <p class="my-4"> {{ informacionFinal }} </p>
+          <!--<div class="text-center col-20 mb-4">-->
+            <div class="">
+            <b-button  v-b-modal.modal-scrollable-1 @click="informacionDistribucion()">Información</b-button>
+            <b-modal id="modal-scrollable-1" scrollable title="Distribución Uniforme">
+              <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
           </div>
-          {{ informacion }} {{ informacionFinal }}
           <b-input-group size="lg" class="mb-4">
-            {{ informacion }} {{ informacionFinal }}
             <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="normalCantidad" v-on:keypress="onlyNumbers($event)" >{{ informacion }}</b-form-input>
-            {{ informacion }} {{ informacionFinal }}
           </b-input-group>
-          {{ informacion }} {{ informacionFinal }}
-          <b-button class="text-center col-12 mb-4" variant="danger" @click="distribucionNormal()">Calcular</b-button>
-          {{ informacion }} {{ informacionFinal }}
-          <p class="col-12 mb-4 text-center">{{ informacion }} {{finalUniforme}}</p>
-          {{ informacion }} {{ informacionFinal }}
+          <b-button class="" variant="danger" @click="distribucionNormal()">Calcular</b-button>
+          <p class="col-12 mb-4 text-center">{{finalUniforme}}</p>
         </div>
 
         <!-- Dist. Binomial -->
         <div v-show="currentTab==2">
           <div>
-            <b-button v-b-modal.modal-1>Información</b-button>
-          
-            <b-modal id="modal-2" title="Distribución Binomial">
-              <p class="my-4"> {{ informacion }} </p>
+            <b-button v-b-modal.modal-scrollable-2 @click="informacionDistribucion()">Información</b-button>
+            <b-modal id="modal-scrollable-2" scrollable title="Distribución Binomial">
+              <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
           </div>
           <div>
@@ -111,22 +104,17 @@
             ></b-form-input>
           </b-input-group>
           <div>
-            <b-button
-              variant="danger"
-              @click="distribucionBinomial(pExito,qFracaso,nCiclos,probabilidadEventos)"
-              >Ingresar</b-button
-            >
+            <b-button variant="danger" @click="distribucionBinomial()" >Ingresar</b-button>
+            <p>{{finalBinomial}}</p>
           </div>
         </div>
 
         <!-- Dist. Possion -->
         <div v-show="currentTab==3">
-
           <div>
-            <b-button v-b-modal.modal-1>Información</b-button>
-          
-            <b-modal id="modal-3" title="Distribución Poisson">
-              <p class="my-4"> {{ informacion }} </p>
+            <b-button v-b-modal.modal-scrollable-3 @click="informacionDistribucion()">Información</b-button>
+            <b-modal id="modal-scrollable-3" scrollable title="Distribución de Poisson">
+              <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
           </div>
 
@@ -152,12 +140,12 @@
         <!-- Dist. Hipergeometrica -->
         <div v-show="currentTab==4">
           <div>
-            <b-button v-b-modal.modal-1>Información</b-button>
-          
-            <b-modal id="modal-4" title="Distribución Hipergeométrica">
-              <p class="my-4"> {{ informacion }} </p>
+            <b-button v-b-modal.modal-scrollable-4 @click="informacionDistribucion()">Información</b-button>
+            <b-modal id="modal-scrollable-4" scrollable title="Distribución Hipergeométrica">
+              <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
           </div>
+
           <!-- Using props -->
           <b-input-group size="lg" prepend="$" append=".00">
             <b-form-input></b-form-input>
@@ -208,39 +196,36 @@
               axios.post(this.mainUrl +"/uniforme",{
                 cantidadElementos: this.normalCantidad
               })
-              .then(function (response) {
-
+              .then( (response)  =>  {
+                this.finalUniforme = response.data.customResponse.probabilidad;
                 console.log(response);
+                console.log(this.finalUniforme);
               })
-              .catch(function (error) {
+              .catch( (error)  => {
                 console.log(error);
               });
 
             }
           },
-          distribucionBinomial(valX, valY, ciclos, n) {
-            let result,
-              x,y = 0;
+          distribucionBinomial() {
+            if(this.pExito){
 
-            let diff = ciclos - n;
+              axios.post(this.mainUrl +"/binomial",{
+                valX: this.pExito,
+                valY: this.qFracaso,
+                ciclos: this.nCiclos,
+                pEventos: this.probabilidadEventos
+              })
+              .then( (response)  =>  {
+                this.finalBinomial = response.data.customResponse.resultado;
+                console.log(response);
+                console.log(this.finalBinomial);
+              })
+              .catch( (error)  => {
+                console.log(error);
+              });
 
-            for (var i = 1; i <= n; i++) {
-              if (i == 1) {
-                x = valX;
-              } else {
-                x = x * valX;
-              }
             }
-
-            for (var i = 1; i <= diff; i++) {
-              if (i == 1) {
-                y = valY;
-              } else {
-                y = y * valY;
-              }
-            }
-
-            return x * y;
           },
           switchBinomial(p, q, c, n) {
             // TODO
@@ -293,19 +278,12 @@
               axios.post(this.mainUrl +"/informacion",{
                 tipo: this.currentTab
               })
-              .then(function (response) {
-                //console.log(response);
-                //console.log(response.data);
+              .then( (response) => {
                 this.informacion = response.data.customResponse.informacion;
-                //this.informacion = response.data.customResponse;
-                this.informacionFinal = this.informacion;
                 console.log(this.informacion);
-                console.log(this.informacionFinal);
-                //console.log(informacion.customResponse.informacion);
-                //this.informacion=toString('ALV');
 
               })
-              .catch(function (error) {
+              .catch( (error)  => {
                 console.log(error);
               });
 
