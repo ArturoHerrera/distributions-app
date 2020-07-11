@@ -1,5 +1,3 @@
-const distriprob = require("distriprob");
-
 const distribucionesController = {
   uniforme( req, res ) {
 
@@ -27,57 +25,62 @@ const distribucionesController = {
     }
 
   },
-  binomial(req, res) {
-    try {
-      distriprob.binomial.pdf(3,10,12);
-      let result = 0;
-      let x = 0;
-      let y = 0;
-      let valX = req.body.pExito;
-      let valY = req.body.qFracaso;
-      let ciclos = req.body.ciclos;
-      let probabilidadEventos = req.body.probabilidadEventos;
-      let diff = ciclos - probabilidadEventos;
-
-            for ( let i = 1; i <= probabilidadEventos; i++ ) {
-              if (i == 1) {
-                x = valX;
-              } else {
-                x = x * valX;
-              }
-            }
-
-            for ( let i = 1; i <= diff; i++ ) {
-              if ( i == 1 ) {
-                y = valY;
-              } else {
-                y = y * valY;
-              }
-            }
-
-            result = x * y;
-
-            customResponse = {
-              probabilidad : result
-          }
-    
-          res.status( 200 ).send( { "customResponse" : customResponse } );
-    } catch ( error ) {
-      res.status( 500 ).send( error );
-    }
-  },
   binomial2(req, res) {
+    /*
+    Formula
+    B(x,n,p) -> Un Resultado
+    B( (x..y) ,n,p) -> Donde x..y es un rango
+    */
     try {
-      //let result = distriprob.binomial.pdfSync(3,10,12);
-      
-      console.log( "binomial --> " , distriprob.binomial.pdfSync(10,3,88) );   // 0.3989422804014327
-      //distriprob.binomial.pdf(3,10,0.12).then((result) => {
-      distriprob.binomial.cdfSync().then((result) => {
-        console.log(result);    
-        res.send( JSON.stringify(result.toFixed( 4 )) );                        // 1
-      });
 
-      
+      let n = req.body.n;
+      let p = req.body.p;
+
+      console.log("-- 1 --");
+
+      if(req.body.rango == true){
+
+        console.log("-- 2 --");
+
+        let x = req.body.x;
+        let y = req.body.y;
+        let mResult = 0;
+        let resultArray = [];
+
+        console.log("-- 3 --");
+
+        for (let index = (x + 1); index < y; index++) {
+
+          console.log(" num ---> ", getCombinacion(n,p,index));
+          console.log(" index ---> ", index);
+          resultArray.push( getCombinacion(n,p,index) );
+
+        }
+
+        for (let index = 0; index < resultArray.length; index++) {
+          console.log("resultArray", resultArray[index]);
+          mResult = mResult + resultArray[index];
+          
+        }
+
+        console.log("-- 4 --");
+
+        res.send( {"probabilidad" : (100 * mResult).toFixed(4)} );   
+      } else {
+
+        let x = req.body.x;
+        console.log("-- 5 --");
+
+	      /*getCombinacion(n,p,x).then((result) => {
+          res.send( result );                        
+        });*/
+
+        var num = getCombinacion(n,p,x);
+
+        res.send( {"probabilidad" : (100 * num).toFixed(4)} );  
+  
+      }
+
     } catch ( error ) {
       res.send( error );
     }
@@ -90,4 +93,27 @@ const distribucionesController = {
   }
 };
 
+
+function getCombinacion(n,p,x){
+  console.log(" -- getCombinacion -- ");
+  var nfact=factorial(n);
+  var xfact=factorial(x);
+  var nxfact = factorial(n-x);
+  var combinationss = (nfact/(xfact*nxfact));
+  var pelevado = Math.pow(p,x);
+  var qelevado = Math.pow(1-p,n-x);
+  var result = combinationss * (pelevado) * (qelevado);
+  return result;
+}
+
+function factorial(n){
+  console.log(" -- factorial -- ");
+  var total = 1; 
+  for (i=1; i<=n; i++) {
+      total = total * i; 
+  }
+  return total;
+}
+
 module.exports = distribucionesController;
+
