@@ -20,6 +20,8 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
     <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
 
   </head>
   <body>
@@ -45,12 +47,17 @@
       <b-container>
 
         <br><br>
-
+        
+        <div>
+          
+        </div>
+        
         <!-- Dist. Normal -->
         <div v-show="currentTab==1">
-          <!--<div class="text-center col-20 mb-4">-->
+          <b-card title="Distribución Uniforme" sub-title="">
+            <b-card-text> ¿Necesitas ayuda?, Da click en el botón de  "Información".
+            </b-card-text>
             <div class="">
-            <b-button  v-b-modal.modal-scrollable-1 @click="informacionDistribucion()">Información</b-button>
             <b-modal id="modal-scrollable-1" scrollable title="Distribución Uniforme">
               <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
@@ -58,61 +65,56 @@
           <b-input-group size="lg" class="mb-4">
             <b-form-input placeholder="Ingresa la cantidad de elementos" v-model="normalCantidad" v-on:keypress="onlyNumbers($event)" >{{ informacion }}</b-form-input>
           </b-input-group>
+          <b-button  v-b-modal.modal-scrollable-1 @click="informacionDistribucion()">Información</b-button>
           <b-button class="" variant="danger" @click="distribucionNormal()">Calcular</b-button>
-          <p class="col-12 mb-4 text-center">{{finalUniforme}}</p>
+          <p class="col-12 mb-4 text-center"> Probabilidad uniforme: {{finalUniforme}}</p>
+          <b-card-text></b-card-text>
+          </b-card>
         </div>
 
         <!-- Dist. Binomial -->
         <div v-show="currentTab==2">
+          <b-card title="Distribución Binomial" sub-title="">
+            <b-card-text> ¿Necesitas ayuda?, Da click en el botón de  "Información".
+            </b-card-text>
           <div>
-            <b-button v-b-modal.modal-scrollable-2 @click="informacionDistribucion()">Información</b-button>
             <b-modal id="modal-scrollable-2" scrollable title="Distribución Binomial">
               <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
           </div>
-          <div>
-            <b-form-checkbox size="lg" v-model="banderaExito"
-              >Éxito</b-form-checkbox
-            >
-            <b-form-checkbox size="lg" v-model="banderaFracaso"
-              >Fracaso</b-form-checkbox
-            >
-            <label>{{ banderaExito }}</label>
-          </div>
-          <b-input-group size="lg">
+          <b-input-group class="my-4" size="lg">
             <b-form-input
-              placeholder="Ingresa la probabilidad de éxito"
-              v-model="pExito"
+              placeholder="x:"
+              v-model="x"
             ></b-form-input>
           </b-input-group>
-          <b-input-group size="lg">
+          <b-input-group class="my-4" size="lg">
             <b-form-input
-              placeholder="Ingresa la probabilidad de fracaso"
-              v-model="qFracaso"
+              placeholder="n:"
+              v-model="n"
             ></b-form-input>
           </b-input-group>
-          <b-input-group size="lg">
+          <b-input-group class="my-4" size="lg">
             <b-form-input
-              placeholder="Ingresa la cantidad de eventos esperados"
-              v-model="probabilidadEventos"
+              placeholder="p:"
+              v-model="p"
             ></b-form-input>
           </b-input-group>
-          <b-input-group size="lg">
-            <b-form-input
-              placeholder="Ingresa la cantidad de ciclos"
-              v-model="nCiclos"
-            ></b-form-input>
           </b-input-group>
           <div>
-            <b-button variant="danger" @click="distribucionBinomial()" >Ingresar</b-button>
-            <p>{{finalBinomial}}</p>
-          </div>
-        </div>
+            <b-button class="my-4" v-b-modal.modal-scrollable-2 @click="informacionDistribucion()">Información</b-button>
+            <b-button class="my-4" variant="danger" @click="distribucionBinomial()" >Ingresar</b-button>
+            <p class="my-4">{{finalBinomial}}</p>
+          </div> <b-card-text></b-card-text>
+          </b-card>
+       </div>
 
         <!-- Dist. Possion -->
         <div v-show="currentTab==3">
+          <b-card title="Distribución Poisson" sub-title="">
+            <b-card-text> ¿Necesitas ayuda?, Da click en el botón de  "Información".
+            </b-card-text>
           <div>
-            <b-button v-b-modal.modal-scrollable-3 @click="informacionDistribucion()">Información</b-button>
             <b-modal id="modal-scrollable-3" scrollable title="Distribución de Poisson">
               <p class="my-4"></p> {{ informacion }} </p>
             </b-modal>
@@ -126,8 +128,8 @@
           <b-input-group size="lg" class="mb-4">
             <b-form-input placeholder="Ingresa el promedio de éxitos esperados" v-model="lPromedio"></b-form-input>
           </b-input-group>
-          
-          <b-button class="text-center col-12 mb-4" variant="danger" @click="distribucionPossion(normalCantidad)">Ingresar</b-button>
+          <b-button v-b-modal.modal-scrollable-3 @click="informacionDistribucion()">Información</b-button>
+          <b-button class="my-4" variant="danger" @click="distribucionPossion(normalCantidad)">Ingresar</b-button>
 
           <div>
             <p class="col-12 mb-4 text-center">La probabilidad de que sea un éxito en base al número de éxitos esperados es:  </p>
@@ -135,21 +137,51 @@
             <p class="col-12 mb-4 text-center">La probabilidad de que sea menor a el número de éxitos es:   </p>
             <p class="col-12 mb-4 text-center">p({{ xExito}}<{{lPromedio}}) = {{finalPossionSum}}</p>
           </div>
+          <b-card-text></b-card-text>
+        </b-card>
         </div>
 
         <!-- Dist. Hipergeometrica -->
-        <div v-show="currentTab==4">
-          <div>
-            <b-button v-b-modal.modal-scrollable-4 @click="informacionDistribucion()">Información</b-button>
-            <b-modal id="modal-scrollable-4" scrollable title="Distribución Hipergeométrica">
-              <p class="my-4"></p> {{ informacion }} </p>
-            </b-modal>
-          </div>
-
-          <!-- Using props -->
-          <b-input-group size="lg" prepend="$" append=".00">
-            <b-form-input></b-form-input>
-          </b-input-group>
+          <div v-show="currentTab==4">
+            <b-card title="Distribución Hipergeométrica" sub-title="">
+              <b-card-text> ¿Necesitas ayuda?, Da click en el botón de  "Información".
+              </b-card-text>
+            <div>
+              <b-modal id="modal-scrollable-4" scrollable title="Distribución Hipergeométrica">
+                <p class="my-4"></p> {{ informacion }} </p>
+              </b-modal>
+            </div>
+            <b-input-group class="my-4" size="lg">
+              <b-form-input
+                placeholder="x:"
+                v-model="x"
+              ></b-form-input>
+            </b-input-group>
+            <b-input-group class="my-4" size="lg">
+              <b-form-input
+                placeholder="n:"
+                v-model="n"
+              ></b-form-input>
+            </b-input-group>
+            <b-input-group class="my-4" size="lg">
+              <b-form-input
+                placeholder="k:"
+                v-model="k"
+              ></b-form-input>
+            </b-input-group>
+            <b-input-group class="my-4" size="lg">
+              <b-form-input
+                placeholder="N:"
+                v-model="N"
+              ></b-form-input>
+            </b-input-group>
+            <div>
+              <b-button class="my-4" v-b-modal.modal-scrollable-4 @click="informacionDistribucion()">Información</b-button>
+              <b-button class="my-4" variant="danger" @click="distribucionBinomial()" >Ingresar</b-button>
+              <p class="my-4">{{finalBinomial}}</p>
+            </div> <b-card-text></b-card-text>
+            </b-card>
+         </div>
         </div>
       </b-container>
 
@@ -168,10 +200,11 @@
           finalUniforme: "",
           resultadoNormalArray: [],
           resultadoPossionArray: [],
-          pExito: "",
-          qFracaso: "",
-          probabilidadEventos: "",
-          nCiclos: "",
+          x: "",
+          n: "",
+          p: "",
+          k: "",
+          N: "",
           finalBinomial: "",
           xExito: "",
           lPromedio: "",
@@ -211,10 +244,9 @@
             if(this.pExito){
 
               axios.post(this.mainUrl +"/binomial",{
-                valX: this.pExito,
-                valY: this.qFracaso,
-                ciclos: this.nCiclos,
-                pEventos: this.probabilidadEventos
+                valX: this.x,
+                valY: this.p,
+                ciclos: this.n
               })
               .then( (response)  =>  {
                 this.finalBinomial = response.data.customResponse.resultado;
@@ -296,6 +328,7 @@
               case 1:
                 console.log("caso1");
                 this.normalCantidad = "";
+                this.finalUniforme = "";
                 break;
             }
           },
