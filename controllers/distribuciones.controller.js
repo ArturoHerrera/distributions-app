@@ -19,9 +19,9 @@ const distribucionesController = {
           cantidadObjetos : resultArray
       }
 
-      res.status( 200 ).send( { "customResponse" : customResponse } );
+      res.send( { "customResponse" : customResponse } );
     } catch ( error ) {
-      res.status( 500 ).send( error );
+      res.send( error );
     }
 
   },
