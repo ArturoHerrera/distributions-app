@@ -71,14 +71,14 @@ const distribucionesController = {
       //let result = distriprob.binomial.pdfSync(3,10,12);
       
       console.log( "binomial --> " , distriprob.binomial.pdfSync(10,3,88) );   // 0.3989422804014327
-      distriprob.binomial.pdf(3,10,0.12).then((result) => {
+      distriprob.binomial.pdfSync(10,3,0.12).then((result) => {
         console.log(result);    
-        res.send( JSON.stringify(result.toFixed( 4 ) + '%') );                        // 1
+        res.status( 200 ).send( { "customResponse" : result } );                        // 1
       });
 
       
     } catch ( error ) {
-      res.send( error );
+      res.status( 500 ).send( error );
     }
   },
   poisson(req, res) {

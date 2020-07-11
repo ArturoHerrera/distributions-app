@@ -29,7 +29,7 @@ const distribucionesController = {
   },
   binomial(req, res) {
     try {
-      distriprob.binomial.pdf(3,10,12);
+      
       let result = 0;
       let x = 0;
       let y = 0;
@@ -64,21 +64,6 @@ const distribucionesController = {
           res.status( 200 ).send( { "customResponse" : customResponse } );
     } catch ( error ) {
       res.status( 500 ).send( error );
-    }
-  },
-  binomial2(req, res) {
-    try {
-      //let result = distriprob.binomial.pdfSync(3,10,12);
-      
-      console.log( "binomial --> " , distriprob.binomial.pdfSync(10,3,88) );   // 0.3989422804014327
-      distriprob.binomial.pdf(3,10,0.12).then((result) => {
-        console.log(result);    
-        res.send( JSON.stringify(result.toFixed( 4 ) + '%') );                        // 1
-      });
-
-      
-    } catch ( error ) {
-      res.send( error );
     }
   },
   poisson(req, res) {
