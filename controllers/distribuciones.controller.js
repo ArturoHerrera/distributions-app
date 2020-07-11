@@ -25,7 +25,7 @@ const distribucionesController = {
     }
 
   },
-  binomial2(req, res) {
+  binomial(req, res) {
     /*
     Formula
     B(x,n,p) -> Un Resultado
@@ -111,7 +111,14 @@ const distribucionesController = {
     }
   },
   hipergeometrica(req, res) {
-    //TODO
+    //getHyper(x,n,k,nmay)
+    let x = req.body.x;
+    let n = req.body.n;
+    let k = req.body.k;
+    let nmay = req.body.nmay;
+
+    console.log(" getHyper(x,n,k,nmay) ---> " , getHyper(x,n,k,nmay));
+    res.send( {"probabilidad" : (getHyper(x,n,k,nmay) * 100).toFixed(4)} );  
   }
 };
 
@@ -147,6 +154,24 @@ var xfact=factorial(x);
   var poissssson = (e*(Math.pow(lambda,x)))/xfact;
     return poissssson;
 }
+
+function combination(n,r){
+  var nfact = factorial(n)
+  var rfact = factorial(r)
+var nrfact = factorial(n-r);
+
+  var res = Math.round((nfact/(rfact*nrfact)));
+  return res;
+}
+
+function getHyper(x,n,k,nmay){
+  var kx = combination(k,x);
+  var nknx = combination(nmay-k, n-x);
+  var nmayn= combination(nmay,n);
+  var result = ( kx * nknx)/nmayn;
+
+  return result;
+    }
 
 module.exports = distribucionesController;
 
