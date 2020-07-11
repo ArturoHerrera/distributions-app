@@ -32,6 +32,7 @@ const distribucionesController = {
     B( (x..y) ,n,p) -> Donde x..y es un rango
     */
     try {
+<<<<<<< HEAD
 
       let n = req.body.n;
       let p = req.body.p;
@@ -81,6 +82,18 @@ const distribucionesController = {
   
       }
 
+=======
+      //let result = distriprob.binomial.pdfSync(3,10,12);
+      
+      console.log( "binomial --> " , distriprob.binomial.pdfSync(10,3,88) );   // 0.3989422804014327
+      //distriprob.binomial.pdf(3,10,0.12).then((result) => {
+        distriprob.binomial.cdfSync(3,10,0.12).then( (result) => {
+        console.log(result.toFixed( 4 ));    
+        res.send( result.toFixed( 4 )  );                        // 1
+      });
+
+      
+>>>>>>> a95575d0dc3d064fa9ab2b1721f675b39df3be7a
     } catch ( error ) {
       res.send( error );
     }
