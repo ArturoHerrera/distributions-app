@@ -72,9 +72,9 @@ const distribucionesController = {
       
       console.log( "binomial --> " , distriprob.binomial.pdfSync(10,3,88) );   // 0.3989422804014327
       //distriprob.binomial.pdf(3,10,0.12).then((result) => {
-      distriprob.binomial.cdfSync().then((result) => {
-        console.log(result);    
-        res.send( JSON.stringify(result.toFixed( 4 )) );                        // 1
+        distriprob.binomial.cdfSync(3,10,0.12).then( (result) => {
+        console.log(result.toFixed( 4 ));    
+        res.send( result.toFixed( 4 )  );                        // 1
       });
 
       
