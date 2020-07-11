@@ -35,6 +35,7 @@ const distribucionesController = {
 
       let n = req.body.n;
       let p = req.body.p;
+      let customResponse = null;
 
       console.log("-- 1 --");
 
@@ -65,7 +66,11 @@ const distribucionesController = {
 
         console.log("-- 4 --");
 
-        res.send( {"probabilidad" : (100 * mResult).toFixed(4)} );   
+        customResponse = {
+          probabilidad : (100 * mResult).toFixed(4)
+        }
+
+        res.send( customResponse );   
       } else {
 
         let x = req.body.x;
@@ -74,10 +79,16 @@ const distribucionesController = {
 	      /*getCombinacion(n,p,x).then((result) => {
           res.send( result );                        
         });*/
-
+        console.log("-- n --", n);
+        console.log("-- p --", p);
+        console.log("-- x --", x);
         var num = getCombinacion(n,p,x);
 
-        res.send( {"probabilidad" : (100 * num).toFixed(4)} );  
+        customResponse = {
+          probabilidad : (100 * num).toFixed(4)
+        }
+
+        res.send( customResponse );  
   
       }
 
