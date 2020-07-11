@@ -86,7 +86,29 @@ const distribucionesController = {
     }
   },
   poisson(req, res) {
-    //TODO
+    let lambda = req.body.lambda;
+    let x = req.body.x;
+
+    if(req.body.menosDe == true){
+      let mResult = 0;
+      let resultArray = [];
+
+      console.log(" x --> " , x);
+      console.log(" lambda --> " , lambda);
+
+      for (var index = 0; index < x; index++) {
+        console.log(" index --> " , index);
+        resultArray.push(getpoisson(lambda, index));
+      }
+
+      resultArray.forEach(element => {
+        mResult = mResult + element;
+      });
+
+      res.send( {"probabilidad" : (mResult * 100).toFixed(4)} );  
+    } else {
+      res.send( {"probabilidad" : (getpoisson(lambda,x) * 100).toFixed(4)} );   
+    }
   },
   hipergeometrica(req, res) {
     //TODO
@@ -107,12 +129,23 @@ function getCombinacion(n,p,x){
 }
 
 function factorial(n){
-  console.log(" -- factorial -- ");
-  var total = 1; 
-  for (i=1; i<=n; i++) {
-      total = total * i; 
+  if (n==0){
+    n=1;
   }
-  return total;
+    var total = 1; 
+    for (i=1; i<=n; i++) {
+        total = total * i; 
+    }
+    return total;
+}
+
+function getpoisson(lambda,x){
+  var e = Math.exp(0-lambda);
+var xfact=factorial(x);
+
+
+  var poissssson = (e*(Math.pow(lambda,x)))/xfact;
+    return poissssson;
 }
 
 module.exports = distribucionesController;
